@@ -1,0 +1,29 @@
+{
+  "name": "vehicle-valuation-api",
+  "version": "1.0.0",
+  "description": "A server with an API that receives vehicle information, validates the vehicle and provides the estimated value of the vehicle.",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spoofBlue/Vehicle-Valuation-API.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Express",
+    "API",
+    "REST"
+  ],
+  "author": "Cory Nanni",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spoofBlue/Vehicle-Valuation-API/issues"
+  },
+  "homepage": "https://github.com/spoofBlue/Vehicle-Valuation-API#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
