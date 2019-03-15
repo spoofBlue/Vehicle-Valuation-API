@@ -4,20 +4,21 @@ console.log("In server.js now.");
 // Dependencies
 const express = require("express");
 
-const validationRouter = require("./routes/validationRouter");
 const valueRouter = require("./routes/valueRouter");
 const { PORT } = require("./config");
 
 // Setup Dependencies
 const app = express();
 
-app.use('/value', validationRouter, valueRouter);
+// Routing
+app.use('/value', valueRouter);
 
 app.use(`*`, function (req, res) {
-    res.send("Invalid route request");
+    res.status(400).send("Invalid route request.");
 });
 
-function runServer() {    // Starting the app can now be exporting to testing.
+// Opening Server
+function runServer() {    // Starting the app can now be exported for testing.
     app.listen(port = PORT, () => {
         console.log(`The app is listening at port ${port}`);
     });
