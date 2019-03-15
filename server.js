@@ -1,6 +1,4 @@
 
-console.log("In server.js now.");
-
 // Dependencies
 const express = require("express");
 

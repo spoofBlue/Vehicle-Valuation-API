@@ -1,6 +1,4 @@
 
-console.log(`In valueRouter.js now.`);
-
 // Dependencies
 const express = require("express");
 const fetch = require('node-fetch');
@@ -50,7 +48,6 @@ function validateMake(make) {
     return fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.toUpperCase()}?format=json`)
         .then(res => res.json())
         .then(res => {
-            console.log(`arrived here. res.Count=`, res.Count);
             return res.Count > 0;
         })
         .catch(() => {
@@ -86,7 +83,6 @@ function determineValue(data) {
         const reductionPerMileageIncrement = .002;
 
         let increments = mileage >= maxMileage ? Math.floor(maxMileage / mileageIncrement) : Math.floor(mileage / mileageIncrement);
-        console.log(increments);
         while (increments > 0) {
             cost -= cost * reductionPerMileageIncrement;
             increments--;
