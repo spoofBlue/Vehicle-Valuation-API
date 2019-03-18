@@ -27,6 +27,7 @@
     "chai-http": "^4.2.1",
     "express": "^4.16.4",
     "mocha": "^6.0.2",
+    "node": "^11.12.0",
     "node-fetch": "^2.3.0"
   },
   "devDependencies": {
