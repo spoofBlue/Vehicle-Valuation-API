@@ -12,7 +12,7 @@ const app = express();
 app.use('/value', valueRouter);
 
 app.use(`*`, function (req, res) {
-    res.status(400).send("Invalid route request.");
+    res.status(400).send({ error: "Invalid route request." });
 });
 
 // Opening Server

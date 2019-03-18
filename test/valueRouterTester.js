@@ -43,6 +43,20 @@ describe("Server Testing", function () {
             });
     });
 
+    it("returns a value, given a valid make, valid model, marketvalue, age, mileage, collisions, and owners", function () {
+        const query = `?make=honda&model=civic&marketvalue=1000&age=12&mileage=1000&collisions=1&owners=2`
+        return chai.request(app)
+            .get(`/value${query}`)
+            .then(function (res) {
+                console.log(res.body);
+                expect(res).to.have.status(200);
+                expect(res.body).to.have.key("value");
+            })
+            .catch(function (err) {
+                expect(err).to.be.null;
+            });
+    });
+
     it("returns an error due to an invalid make", function () {
         const query = `?make=zyx1111&model=civic&marketvalue=1000&age=0&owners=1`
         return chai.request(app)

@@ -10,15 +10,15 @@ const router = express.Router();
 router.get(``, function (req, res) {
     let invalidFields = checkQueryForErrors(req.query);
     if (invalidFields.length > 0) {
-        res.status(400).json({ error: { invalidFields } });
+        res.status(400).send({ error: { invalidFields } });
     }
     return validateMake(req.query.make, req.query.model)
         .then(validMake => {
             if (!validMake) {
-                res.status(422).json({ error: { "make-model": "Invalid Make/Model requested." } });
+                res.status(422).send({ error: { "make-model": "Invalid Make/Model requested." } });
             }
             const cost = determineValue(req.query);
-            res.status(200).json({ value: cost });
+            res.status(200).send({ value: cost });
         })
         .catch(err => {
             res.status(422);
@@ -60,7 +60,7 @@ function validateMake(make, model) {
             return res.Results.findIndex(car => car.Model_Name.toLowerCase() === model.toLowerCase().trim()) !== -1;
         })
         .catch(() => {
-            res.status(424).json({ error: { server: "A 3rd-party API is down." } });
+            res.status(424).send({ error: { server: "A 3rd-party API is down." } });
         });
 }
 
