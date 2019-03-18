@@ -8,18 +8,7 @@ const { app, runServer, closeServer } = require("../server");
 const expect = chai.expect;
 chai.use(chaiHttp);
 
-// Helper Functions
-
-const DEFAULTDATA = {
-    make: "honda",
-    model: "civic",
-    marketvalue: 1000,
-    age: 0,
-    owners: 1,
-    mileage: 0,
-    collisions: 0
-}
-
+// Tests
 describe("Server Testing", function () {
     before(function () {
         return runServer();
@@ -33,7 +22,6 @@ describe("Server Testing", function () {
         return chai.request(app)
             .get(`/value${query}`)
             .then(function (res) {
-                console.log(res.body);
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.key("value");
                 expect(res.body.value).to.equal(1000);
@@ -48,7 +36,6 @@ describe("Server Testing", function () {
         return chai.request(app)
             .get(`/value${query}`)
             .then(function (res) {
-                console.log(res.body);
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.key("value");
             })
@@ -62,7 +49,6 @@ describe("Server Testing", function () {
         return chai.request(app)
             .get(`/value${query}`)
             .then(function (res) {
-                console.log(res.body);
                 expect(res).to.have.status(422);
                 expect(res.body).to.have.key("error");
                 expect(res.body.error["make-model"]).to.equal("Invalid Make/Model requested.");
@@ -77,7 +63,6 @@ describe("Server Testing", function () {
         return chai.request(app)
             .get(`/value${query}`)
             .then(function (res) {
-                console.log(res.body);
                 expect(res).to.have.status(400);
                 expect(res.body).to.have.key("error");
                 expect(res.body.error["invalidFields"]).to.have.length(3);
