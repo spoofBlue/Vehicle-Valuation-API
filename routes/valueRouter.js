@@ -57,7 +57,8 @@ function validateMake(make, model) {
             if (res.Count === 0) {
                 return false;
             }
-            return res.Results.findIndex(car => car.Model_Name.toLowerCase() === model.toLowerCase().trim()) !== -1;
+            return res.Results.findIndex(car => car.Make_Name.toLowerCase() === make.toLowerCase().trim()) !== -1 &&
+                res.Results.findIndex(car => car.Model_Name.toLowerCase() === model.toLowerCase().trim()) !== -1;
         })
         .catch(() => {
             res.status(424).send({ error: { server: "A 3rd-party API is down." } });
