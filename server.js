@@ -16,10 +16,16 @@ app.use(`*`, function (req, res) {
 });
 
 // Opening Server
+let server;
+
 function runServer() {    // Starting the app can now be exported for testing.
-    app.listen(port = PORT, () => {
+    server = app.listen(port = PORT, () => {
         console.log(`The app is listening at port ${port}`);
     });
+}
+
+function closeServer() {
+    server.close(err => console.log("closeServer error:", err));
 }
 
 if (require.main === module) {
@@ -27,4 +33,4 @@ if (require.main === module) {
 }
 
 // Exports
-module.exports = { app };
+module.exports = { app, runServer, closeServer };

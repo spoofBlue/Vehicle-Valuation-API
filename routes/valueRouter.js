@@ -124,7 +124,7 @@ function determineValue(data) {
         }
     }
 
-    return cost;
+    return parseFloat(cost.toFixed(2));
 }
 
 module.exports = router;
