@@ -11,6 +11,11 @@ npm install
 npm start
 ```
 
+### Test server (mocha)
+```
+npm test
+```
+
 Documentation Notes:
 -	Expect a query string with the required keys: make, model, marketvalue, age, owners.
 -	Additionally, the query string may have these optional keys: mileage, collision.
@@ -21,8 +26,7 @@ Documentation Notes:
 - collision value should be a number.
 
 To Do List:
--	Create testing for the endpoint (will be using Mocha/Chai)
+
 -	Provide more detail to documentation on this README.md
--	Revisit function comment descriptions
-- Could further validate requests (check for integers/ reasonable values)
+-	Can create additional tests for the endpoint
 -	Could setup Travis CI/Heroku deployment  
