@@ -12,10 +12,10 @@ router.get(``, function (req, res) {
     if (invalidFields.length > 0) {
         res.status(400).json({ error: { invalidFields } });
     }
-    return validateMake(req.query.make)
+    return validateMake(req.query.make, req.query.model)
         .then(validMake => {
             if (!validMake) {
-                res.status(422).json({ error: { make: "Invalid Make requested." } });
+                res.status(422).json({ error: { "make-model": "Invalid Make/Model requested." } });
             }
             const cost = determineValue(req.query);
             res.status(200).json({ value: cost });
@@ -32,23 +32,32 @@ function checkQueryForErrors(data) {
     // Errors found are represented as an object, pushed into the area errorFields.
     // Returns an array of objects, or an empty array if there's no errors.
     const invalidFields = [];
-    const requiredFields = ["marketValue", "make", "model", "age", "owners"];
+    const requiredFields = ["marketvalue", "make", "model", "age", "owners"];
+    const numberFields = ["marketvalue", "age", "mileage", "collisions", "owners"];
     requiredFields.forEach(field => {
         if (!data[field]) {
             invalidFields.push({ [field]: "Field not present." });
         }
     });
+    numberFields.forEach(field => {
+        if (data[field] && isNaN(data[field]) && isNaN(parseFloat(data[field]))) {
+            invalidFields.push({ [field]: "Field must be a number." });
+        }
+    });
     return invalidFields;
 }
 
-function validateMake(make) {
-    // Given a string (make), validates whether the make is present in the NHTSA database.
+function validateMake(make, model) {
+    // Given two strings (make, model), validates whether the make & model are present in the NHTSA database.
     // // Exam-related note, I could use tertuary statements in place of if-else if necessary.  Whichever conventions are preferred.
     // // Exam-related note, I could use other API retrieval libraries (built-in http.get, axiom). Just have some preference for node-fetch.
-    return fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.toUpperCase()}?format=json`)
+    return fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.trim()}?format=json`)
         .then(res => res.json())
         .then(res => {
-            return res.Count > 0;
+            if (res.Count === 0) {
+                return false;
+            }
+            return res.Results.findIndex(car => car.Model_Name.toLowerCase() === model.toLowerCase().trim()) !== -1;
         })
         .catch(() => {
             res.status(424).json({ error: { server: "A 3rd-party API is down." } });
