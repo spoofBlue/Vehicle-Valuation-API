@@ -10,7 +10,7 @@ const router = express.Router();
 router.get(``, function (req, res) {
     let invalidFields = checkQueryForErrors(req.query);
     if (invalidFields.length > 0) {
-        res.status(400).send({ error: { invalidFields } });
+        res.status(400).send({ error: invalidFields });
     }
     return validateMake(req.query.make, req.query.model)
         .then(validMake => {
@@ -31,17 +31,17 @@ function checkQueryForErrors(data) {
     // Given an object (query), determines if required fields are present.
     // Errors found are represented as an object, pushed into the area errorFields.
     // Returns an array of objects, or an empty array if there's no errors.
-    const invalidFields = [];
+    const invalidFields = {};
     const requiredFields = ["marketvalue", "make", "model", "age", "owners"];
     const numberFields = ["marketvalue", "age", "mileage", "collisions", "owners"];
     requiredFields.forEach(field => {
         if (!data[field]) {
-            invalidFields.push({ [field]: "Field not present." });
+            invalidFields[field] = "Field not present.";
         }
     });
     numberFields.forEach(field => {
         if (data[field] && isNaN(data[field]) && isNaN(parseFloat(data[field]))) {
-            invalidFields.push({ [field]: "Field must be a number." });
+            invalidFields[field] = "Field must be a number.";
         }
     });
     return invalidFields;

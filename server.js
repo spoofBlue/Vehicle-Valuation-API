@@ -1,6 +1,7 @@
 
 // Dependencies
 const express = require("express");
+const cors = require("cors");
 
 const valueRouter = require("./routes/valueRouter");
 const { PORT } = require("./config");
@@ -9,6 +10,8 @@ const { PORT } = require("./config");
 const app = express();
 
 // Routing
+app.use(cors());
+
 app.use('/value', valueRouter);
 
 app.use(`*`, function (req, res) {
