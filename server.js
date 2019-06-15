@@ -9,8 +9,14 @@ const { PORT } = require("./config");
 // Setup Dependencies
 const app = express();
 
+const corsOptions = {
+    origin: `*`,
+    method: `GET`,
+    //optionsSuccessStatus : 200
+}
+
 // Routing
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use('/value', valueRouter);
 

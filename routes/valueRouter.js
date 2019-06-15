@@ -10,7 +10,7 @@ const router = express.Router();
 router.get(``, function (req, res) {
     let invalidFields = checkQueryForErrors(req.query);
     if (invalidFields.length > 0) {
-        res.status(400).send({ error: invalidFields });
+        res.status(422).send({ error: invalidFields });
     }
     return validateMake(req.query.make, req.query.model)
         .then(validMake => {
@@ -20,17 +20,17 @@ router.get(``, function (req, res) {
             const cost = determineValue(req.query);
             res.status(200).send({ value: cost });
         })
-        .catch(err => {
-            res.status(422);
+        .catch(() => {
+            res.status(503).send({ error: { server: "A 3rd-party API is down." } });
         });
 });
 
 // Helper Functions
 
 function checkQueryForErrors(data) {
-    // Given an object (query), determines if required fields are present.
-    // Errors found are represented as an object, pushed into the area errorFields.
-    // Returns an array of objects, or an empty array if there's no errors.
+    // Given an object (data), determines if required fields are present.
+    // Errors found are represented added to the invalidFields object.
+    // Returns an object, which will be empty if there's no errors.
     const invalidFields = {};
     const requiredFields = ["marketvalue", "make", "model", "age", "owners"];
     const numberFields = ["marketvalue", "age", "mileage", "collisions", "owners"];
@@ -49,8 +49,6 @@ function checkQueryForErrors(data) {
 
 function validateMake(make, model) {
     // Given two strings (make, model), validates whether the make & model are present in the NHTSA database.
-    // // Exam-related note, I could use tertuary statements in place of if-else if necessary.  Whichever conventions are preferred.
-    // // Exam-related note, I could use other API retrieval libraries (built-in http.get, axiom). Just have some preference for node-fetch.
     return fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.trim()}?format=json`)
         .then(res => res.json())
         .then(res => {
@@ -61,12 +59,12 @@ function validateMake(make, model) {
                 res.Results.findIndex(car => car.Model_Name.toLowerCase() === model.toLowerCase().trim()) !== -1;
         })
         .catch(() => {
-            res.status(424).send({ error: { server: "A 3rd-party API is down." } });
+            res.status(503).send({ error: { server: "A 3rd-party API is down." } });
         });
 }
 
 function determineValue(data) {
-    // Given an object (query), values the used car based on multiple factors.
+    // Given an object (data), values the used car based on multiple factors.
     // Note: ownersFactor must be calculated last here.
     const { marketvalue, age, mileage, owners, collisions } = data;
     let cost = marketvalue;
@@ -116,12 +114,12 @@ function determineValue(data) {
         //If the car has had more than 2 previous owners, reduce its value by twenty-five (25) percent.
         //If the car has had no previous owners, add ten (10) percent to the FINAL car value at the end.
         const reductionForManyOwners = 0.25;
-        const noOwnersIncrease = 0.1;
+        const unownedIncrease = 0.1;
 
         if (owners > 2) {
             cost -= cost * reductionForManyOwners;
         } else if (owners === "0") {
-            cost += cost * noOwnersIncrease;
+            cost += cost * unownedIncrease;
         }
     }
 
