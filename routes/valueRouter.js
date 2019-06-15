@@ -7,13 +7,25 @@ const fetch = require('node-fetch');
 const router = express.Router();
 
 // Routing
+router.use(function (req, res, next) {
+    console.log(`in router before header stuff`);
+    res.header(`Access-Control-Allow-Origin`, `*`);
+    res.header(`Access-Control-Allow-Headers`, `Content-Type`, `Accept`);
+    res.header(`Access-Control-Allow-Methods`, `GET`);
+    console.log(`in router after header stuff`);
+    next();
+});
+
 router.get(``, function (req, res) {
     let invalidFields = checkQueryForErrors(req.query);
-    if (invalidFields.length > 0) {
-        res.status(422).send({ error: invalidFields });
+    if (!isEmpty(invalidFields)) {
+        res.status(400).send({ error: invalidFields });
     }
+    console.log(`in get request after invalidFields. invalidFields=`, invalidFields);
+
     return validateMake(req.query.make, req.query.model)
         .then(validMake => {
+            console.log(`in get request. after validateMake. validMake=`, validMake);
             if (!validMake) {
                 res.status(422).send({ error: { "make-model": "Invalid Make/Model requested." } });
             }
@@ -47,18 +59,30 @@ function checkQueryForErrors(data) {
     return invalidFields;
 }
 
+function isEmpty(object) {
+    // Returns true if the object has no entries. pre-ECMA5 valid.
+    for (let prop in object) {
+        if (object.hasOwnProperty(prop))
+            return false;
+    }
+    return true;
+}
+
 function validateMake(make, model) {
     // Given two strings (make, model), validates whether the make & model are present in the NHTSA database.
+    console.log(`in validateMake`);
     return fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.trim()}?format=json`)
         .then(res => res.json())
         .then(res => {
             if (res.Count === 0) {
                 return false;
             }
+            console.log(`success in validateMake.`);
             return res.Results.findIndex(car => car.Make_Name.toLowerCase() === make.toLowerCase().trim()) !== -1 &&
                 res.Results.findIndex(car => car.Model_Name.toLowerCase() === model.toLowerCase().trim()) !== -1;
         })
         .catch(() => {
+            console.log(`error in validateMake`);
             res.status(503).send({ error: { server: "A 3rd-party API is down." } });
         });
 }
