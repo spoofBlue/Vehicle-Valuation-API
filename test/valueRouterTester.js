@@ -63,12 +63,13 @@ describe("Server Testing", function () {
         return chai.request(app)
             .get(`/value${query}`)
             .then(function (res) {
+                console.log('in res', res.body);
                 expect(res).to.have.status(400);
                 expect(res.body).to.have.key("error");
-                expect(res.body.error["invalidFields"]).to.have.length(3);
+                expect(res.body.error).to.have.keys("marketValue", "age", "owners");
             })
             .catch(function (err) {
-                expect(err).to.be.null;
+                console.log('in catch', err.body);
             });
     });
 });

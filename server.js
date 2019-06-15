@@ -26,7 +26,12 @@ function runServer() {    // Starting the app can now be exported for testing.
 }
 
 function closeServer() {
-    server.close(err => console.log("closeServer error:", err));
+    server.close(function (err) {
+        if (err) {
+            console.log("Error: ", err);
+        }
+        console.log("App has closed");
+    });
 }
 
 if (require.main === module) {
