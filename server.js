@@ -9,6 +9,9 @@ const { PORT } = require("./config");
 // Setup Dependencies
 const app = express();
 
+// Client
+app.use(express.static('public'));
+
 // Routing
 app.use('/value', valueRouter);
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Vehicle Valuation Calculator</title>
+    <link href="main.css" type="text/css" rel="stylesheet" />
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+        </script>
+</head>
+
+<body>
+    <noscript>
+        <strong>We're sorry but this page doesn't work properly without JavaScript
+            enabled. Please enable it to continue.</strong>
+    </noscript>
+    <main role="main">
+        <h1>Vehicle Valuation Calculator</h1>
+        <form role="form">
+            <fieldset id="make-model-info">
+                <legend>Car Make/Model</legend>
+                <label for="make">Make:</label>
+                <input type="text" name="make" id="car-make" required /><br>
+                <label for="model">Model:</label>
+                <input type="text" name="model" id="car-model" required />
+            </fieldset>
+            <fieldset id="valuation-info">
+                <legend>Car Valuation Criteria</legend>
+                <label for="marketvalue">Market Value:</label>
+                <input type="number" name="marketvalue" id="car-marketvalue" min="0" required /><br>
+                <label for="age">Age (in months):</label>
+                <input type="number" name="age" id="car-age" min="0" required /><br>
+                <label for="owners">Owners:</label>
+                <input type="number" name="owners" id="car-owners" min="0" required /><br>
+                <label for="mileage">Mileage (in miles):</label>
+                <input type="number" name="mileage" id="car-mileage" min="0" required /><br>
+                <label for="collisions">Collisions:</label>
+                <input type="number" name="collisions" id="car-collisions" min="0" required />
+            </fieldset>
+            <div>
+                <input type="button" id="car-value-submit-button" value="Get Cost Validation!!" />
+                <input type="reset" value="Reset" />
+            </div>
+        </form>
+        <p aria-live="assertive" id="api-output">Submit car information to get your calculation here.</p>
+    </main>
+    <script src="main.js"></script>
+</body>
+
+</html>

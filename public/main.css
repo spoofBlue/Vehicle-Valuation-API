@@ -1,0 +1,10 @@
+
+fieldset {
+    margin-bottom : 5px;
+}
+
+#api-output {
+    margin-top : 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
