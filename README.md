@@ -1,9 +1,13 @@
 # Vehicle-Valuation-API
 A server with an API that receives vehicle information, validates the vehicle and provides the estimated cost of the vehicle given several factors (marketvalue, age, owners, mileage, collisions... see "Car Valuation Criteria" for details).
 
+## Client Sample to use API
+Here is a simple client to allow you to make inputs to the API:
+https://cryptic-plains-11682.herokuapp.com/
+
 ## Making a Request
 Make requests through the following endpoint:
-https://dashboard.heroku.com/apps/cryptic-plains-11682/value
+https://cryptic-plains-11682.herokuapp.com/value
 
 A model example of an API call to this endpoint:
 https://cryptic-plains-11682.herokuapp.com/value?make=honda&model=civic&marketvalue=5000&age=0&owners=1&mileage=0&collisions=0
